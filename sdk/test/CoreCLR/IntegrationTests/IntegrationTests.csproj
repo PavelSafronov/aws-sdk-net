@@ -5,116 +5,47 @@
     <AssemblyName>IntegrationTests</AssemblyName>
     <PackageId>IntegrationTests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <RuntimeIdentifiers>win7-x64;win7-x86</RuntimeIdentifiers>
-    <RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.4;portable-net451+win8</PackageTargetFallback>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Services\APIGateway\APIGateway.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ApplicationAutoScaling\ApplicationAutoScaling.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ApplicationDiscoveryService\ApplicationDiscoveryService.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\AppStream\AppStream.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\AutoScaling\AutoScaling.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\AWSHealth\AWSHealth.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\AWSMarketplaceCommerceAnalytics\AWSMarketplaceCommerceAnalytics.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\AWSMarketplaceMetering\AWSMarketplaceMetering.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\AWSSupport\AWSSupport.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Batch\Batch.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Budgets\Budgets.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CertificateManager\CertificateManager.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CloudDirectory\CloudDirectory.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CloudFormation\CloudFormation.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CloudFront\CloudFront.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CloudHSM\CloudHSM.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CloudSearch\CloudSearch.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CloudSearchDomain\CloudSearchDomain.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CloudTrail\CloudTrail.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CloudWatch\CloudWatch.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CloudWatchEvents\CloudWatchEvents.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CloudWatchLogs\CloudWatchLogs.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CodeBuild\CodeBuild.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CodeCommit\CodeCommit.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CodeDeploy\CodeDeploy.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CodePipeline\CodePipeline.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CodeStar\CodeStar.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CognitoIdentity\CognitoIdentity.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CognitoIdentityProvider\CognitoIdentityProvider.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CognitoSync\CognitoSync.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ConfigService\ConfigService.csproj" />
-    <ProjectReference Include="..\..\..\src\Core\Core.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\CostAndUsageReport\CostAndUsageReport.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\DatabaseMigrationService\DatabaseMigrationService.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\DataPipeline\DataPipeline.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\DeviceFarm\DeviceFarm.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\DirectConnect\DirectConnect.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\DirectoryService\DirectoryService.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\DynamoDBv2\DynamoDBv2.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\EC2\EC2.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ECR\ECR.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ECS\ECS.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ElastiCache\ElastiCache.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ElasticBeanstalk\ElasticBeanstalk.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ElasticFileSystem\ElasticFileSystem.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ElasticLoadBalancing\ElasticLoadBalancing.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ElasticLoadBalancingV2\ElasticLoadBalancingV2.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ElasticMapReduce\ElasticMapReduce.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Elasticsearch\Elasticsearch.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ElasticTranscoder\ElasticTranscoder.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\GameLift\GameLift.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Glacier\Glacier.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\IdentityManagement\IdentityManagement.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ImportExport\ImportExport.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Inspector\Inspector.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\IoT\IoT.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\IotData\IotData.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\KeyManagementService\KeyManagementService.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Kinesis\Kinesis.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\KinesisAnalytics\KinesisAnalytics.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\KinesisFirehose\KinesisFirehose.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Lambda\Lambda.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Lex\Lex.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\LexModelBuildingService\LexModelBuildingService.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Lightsail\Lightsail.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\MachineLearning\MachineLearning.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\MarketplaceEntitlementService\MarketplaceEntitlementService.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\MTurk\MTurk.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\OpsWorks\OpsWorks.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\OpsWorksCM\OpsWorksCM.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Organizations\Organizations.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Pinpoint\Pinpoint.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Polly\Polly.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\RDS\RDS.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Redshift\Redshift.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Rekognition\Rekognition.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ResourceGroupsTaggingAPI\ResourceGroupsTaggingAPI.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Route53\Route53.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Route53Domains\Route53Domains.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\S3\S3.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\SecurityToken\SecurityToken.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ServerMigrationService\ServerMigrationService.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\ServiceCatalog\ServiceCatalog.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Shield\Shield.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\SimpleDB\SimpleDB.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\SimpleEmail\SimpleEmail.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\SimpleNotificationService\SimpleNotificationService.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\SimpleSystemsManagement\SimpleSystemsManagement.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\SimpleWorkflow\SimpleWorkflow.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\Snowball\Snowball.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\SQS\SQS.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\StepFunctions\StepFunctions.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\StorageGateway\StorageGateway.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\WAF\WAF.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\WAFRegional\WAFRegional.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\WorkDocs\WorkDocs.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\WorkSpaces\WorkSpaces.csproj" />
-    <ProjectReference Include="..\..\..\src\Services\XRay\XRay.csproj" />
+    <ProjectReference Include="..\..\..\src\Core\AWSSDK.Core.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\ApplicationAutoScaling\AWSSDK.ApplicationAutoScaling.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\AutoScaling\AWSSDK.AutoScaling.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\AWSSupport\AWSSDK.AWSSupport.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\CodeDeploy\AWSSDK.CodeDeploy.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\CognitoSync\AWSSDK.CognitoSync.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\CloudFormation\AWSSDK.CloudFormation.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\CloudFront\AWSSDK.CloudFront.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\CloudHSM\AWSSDK.CloudHSM.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\CloudSearch\AWSSDK.CloudSearch.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\CloudWatchLogs\AWSSDK.CloudWatchLogs.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\DataPipeline\AWSSDK.DataPipeline.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\DirectoryService\AWSSDK.DirectoryService.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\DynamoDBv2\AWSSDK.DynamoDBv2.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\EC2\AWSSDK.EC2.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\ECS\AWSSDK.ECS.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\Glacier\AWSSDK.Glacier.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\ElasticTranscoder\AWSSDK.ElasticTranscoder.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\ElasticBeanstalk\AWSSDK.ElasticBeanstalk.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\IdentityManagement\AWSSDK.IdentityManagement.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\ImportExport\AWSSDK.ImportExport.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\Kinesis\AWSSDK.Kinesis.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\SecurityToken\AWSSDK.SecurityToken.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\SimpleEmail\AWSSDK.SimpleEmail.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\SimpleSystemsManagement\AWSSDK.SimpleSystemsManagement.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\RDS\AWSSDK.RDS.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\Route53\AWSSDK.Route53.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\Route53Domains\AWSSDK.Route53Domains.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\S3\AWSSDK.S3.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\SimpleNotificationService\AWSSDK.SimpleNotificationService.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\SQS\AWSSDK.SQS.CoreCLR.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\SimpleWorkflow\AWSSDK.SimpleWorkflow.CoreCLR.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta5-build1225" />
-    <PackageReference Include="xunit" Version="2.2.0-beta5-build3474" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
   </ItemGroup>
 
 </Project>

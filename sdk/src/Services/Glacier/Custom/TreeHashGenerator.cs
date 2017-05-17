@@ -116,7 +116,7 @@ namespace Amazon.Glacier
 
             byte[] arr = new byte[hex.Length >> 1];
 
-            for (int i = 0; i < hex.Length >> 1; ++i)
+            for (int i = 0; i < (hex.Length >> 1); ++i)
             {
                 arr[i] = (byte)((getHexVal(hex[i << 1]) << 4) + (getHexVal(hex[(i << 1) + 1])));
             }
