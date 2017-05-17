@@ -58,12 +58,12 @@ namespace ServiceClientGenerator
 
                     GeneratorDriver.RemoveOrphanedShapes(generatedFiles, Path.Combine(options.SdkRootFolder, @"src\Services"));
 
-                    GeneratorDriver.UpdateUnitTestProjects(generationManifest, options);
-                    GeneratorDriver.UpdateSolutionFiles(generationManifest, options);
-                    GeneratorDriver.UpdateAssemblyVersionInfo(generationManifest, options);
-                    GeneratorDriver.UpdateNuGetPackagesInReadme(generationManifest, options);
-                    GeneratorDriver.UpdateCoreCLRTestDependencies(generationManifest, options);
-                    GeneratorDriver.UpdateCodeAnalysisSoltion(generationManifest, options);
+                    //GeneratorDriver.UpdateUnitTestProjects(generationManifest, options);
+                    //GeneratorDriver.UpdateSolutionFiles(generationManifest, options);
+                   // GeneratorDriver.UpdateAssemblyVersionInfo(generationManifest, options);
+                   // GeneratorDriver.UpdateNuGetPackagesInReadme(generationManifest, options);
+                   // GeneratorDriver.UpdateCoreCLRTestDependencies(generationManifest, options);
+                   // GeneratorDriver.UpdateCodeAnalysisSoltion(generationManifest, options);
                 }
                 else
                 {

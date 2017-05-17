@@ -37,51 +37,58 @@ namespace ServiceClientGenerator
                 var assemblyName = "AWSSDK.Core";
                 var projectFilename = string.Concat(assemblyName, ".", projectType, ".csproj");
                 bool newProject = false;
-                string projectGuid;
-                if (File.Exists(Path.Combine(coreFilesRoot, projectFilename)))
+
+                if (projectFileConfiguration.Template.Equals("VS2017ProjectFile", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    Console.WriteLine("...updating existing project file {0}", projectFilename);
-                    var projectPath = Path.Combine(coreFilesRoot, projectFilename);
-                    projectGuid = Utils.GetProjectGuid(projectPath);
+                    // for core, skip csproject generation
+                    //GenerateVS2017ProjectFile(coreFilesRoot, projectFileConfiguration, assemblyName);
                 }
                 else
                 {
-                    newProject = true;
-                    projectGuid = Utils.NewProjectGuid;
-                    Console.WriteLine("...creating project file {0}", projectFilename);
+                    string projectGuid;
+                    if (File.Exists(Path.Combine(coreFilesRoot, projectFilename)))
+                    {
+                        Console.WriteLine("...updating existing project file {0}", projectFilename);
+                        var projectPath = Path.Combine(coreFilesRoot, projectFilename);
+                        projectGuid = Utils.GetProjectGuid(projectPath);
+                    }
+                    else
+                    {
+                        newProject = true;
+                        projectGuid = Utils.NewProjectGuid;
+                        Console.WriteLine("...creating project file {0}", projectFilename);
+                    }
+                    var templateSession = new Dictionary<string, object>();
+
+                    templateSession["Name"] = projectFileConfiguration.Name;
+                    templateSession["ProjectGuid"] = projectGuid;
+                    templateSession["RootNamespace"] = "Amazon";
+                    templateSession["AssemblyName"] = assemblyName;
+                    templateSession["SourceDirectories"] = GetCoreProjectSourceFolders(projectFileConfiguration, coreFilesRoot);
+                    templateSession["IndividualFileIncludes"] = new List<string>
+                    {
+                        "endpoints.json",
+                    };
+                    templateSession["KeyFilePath"] = @"..\..\awssdk.dll.snk";
+                    templateSession["SupressWarnings"] = "419,1570,1591";
+                    templateSession["NugetPackagesLocation"] = @"..\..\packages\";
+                    templateSession["TargetFrameworkVersion"] = projectFileConfiguration.TargetFrameworkVersion;
+                    templateSession["DefineConstants"] = projectFileConfiguration.CompilationConstants;
+                    templateSession["BinSubfolder"] = projectFileConfiguration.BinSubFolder;
+
+                    var projectConfigurationData = new ProjectConfigurationData { ProjectGuid = projectGuid };
+                    var projectName = Path.GetFileNameWithoutExtension(projectFilename);
+
+                    if (newProject)
+                        CreatedProjectFiles[projectName] = projectConfigurationData;
+
+                    var projectReferences = new List<ProjectReference>();
+                    templateSession["ProjectReferences"] = projectReferences.OrderBy(x => x.Name).ToList();
+
+                    templateSession["UnityPath"] = Options.UnityPath;
+
+                    GenerateProjectFile(projectFileConfiguration, projectConfigurationData, templateSession, coreFilesRoot, projectFilename);
                 }
-
-
-                var templateSession = new Dictionary<string, object>();
-
-                templateSession["Name"] = projectFileConfiguration.Name;
-                templateSession["ProjectGuid"] = projectGuid;
-                templateSession["RootNamespace"] = "Amazon";
-                templateSession["AssemblyName"] = assemblyName;
-                templateSession["SourceDirectories"] = GetCoreProjectSourceFolders(projectFileConfiguration, coreFilesRoot);
-                templateSession["IndividualFileIncludes"] = new List<string>
-                {
-                    "endpoints.json",
-                };
-                templateSession["KeyFilePath"] = @"..\..\awssdk.dll.snk";
-                templateSession["SupressWarnings"] = "419,1570,1591";
-                templateSession["NugetPackagesLocation"] = @"..\..\packages\";
-                templateSession["TargetFrameworkVersion"] = projectFileConfiguration.TargetFrameworkVersion;
-                templateSession["DefineConstants"] = projectFileConfiguration.CompilationConstants;
-                templateSession["BinSubfolder"] = projectFileConfiguration.BinSubFolder;
-
-                var projectConfigurationData = new ProjectConfigurationData { ProjectGuid = projectGuid };
-                var projectName = Path.GetFileNameWithoutExtension(projectFilename);
-
-                if (newProject)
-                    CreatedProjectFiles[projectName] = projectConfigurationData;
-
-                var projectReferences = new List<ProjectReference>();
-                templateSession["ProjectReferences"] = projectReferences.OrderBy(x => x.Name).ToList();
-
-                templateSession["UnityPath"] = Options.UnityPath;
-
-                GenerateProjectFile(projectFileConfiguration, projectConfigurationData, templateSession, coreFilesRoot, projectFilename);
             }
         }
 
@@ -96,8 +103,32 @@ namespace ServiceClientGenerator
             CreatedProjectFiles = new Dictionary<string, ProjectConfigurationData>();
             var assemblyName = "AWSSDK." + serviceConfiguration.Namespace.Split('.')[1];
 
+            var projectReferenceList = new List<ProjectReference>();
+            foreach (var dependency in serviceConfiguration.ServiceDependencies.Keys)
+            {
+                if (string.Equals(dependency, "Core", StringComparison.InvariantCultureIgnoreCase))
+                    continue;
+
+                projectReferenceList.Add(new ProjectReference
+                {
+                    IncludePath = string.Format(@"..\..\Services\{0}\AWSSDK.{1}.CoreCLR.csproj", dependency, dependency)
+                });
+            }
+
+            projectReferenceList.Add(new ProjectReference
+            {
+                IncludePath = @"..\..\Core\AWSSDK.Core.CoreCLR.csproj"
+            });
+
             foreach (var projectFileConfiguration in projectFileConfigurations)
             {
+                if (projectFileConfiguration.Template.Equals("VS2017ProjectFile", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    projectFileConfiguration.ProjectReferences = projectReferenceList;
+                    GenerateVS2017ProjectFile(serviceFilesRoot, projectFileConfiguration, assemblyName);
+                    continue;
+                }   
+
                 if (projectFileConfiguration.IsSubProfile &&
                     !(serviceConfiguration.PclVariants != null && serviceConfiguration.PclVariants.Any(p => p.Equals(projectFileConfiguration.Name))))
                 {
@@ -198,11 +229,6 @@ namespace ServiceClientGenerator
 
                 GenerateProjectFile(projectFileConfiguration, projectConfigurationData, templateSession, serviceFilesRoot, projectFilename);
             }
-
-            if (serviceConfiguration.CoreCLRSupport)
-                GenerateCoreCLRProjectFiles(serviceFilesRoot, serviceConfiguration, assemblyName);
-            else
-                Console.WriteLine("Skipping CoreCLR support for {0}", serviceConfiguration.ClassName);
         }
 
         /// <summary>
@@ -239,60 +265,48 @@ namespace ServiceClientGenerator
             projectConfiguration.ConfigurationPlatforms = projectFileConfiguration.Configurations;
         }
 
-
-        private void GenerateCoreCLRProjectFiles(string serviceFilesRoot, ServiceConfiguration serviceConfiguration, string assemblyName)
+        private static List<PackageReference> defaultPackageReferences = new List<PackageReference>
         {
-            var projectFilename = string.Concat(assemblyName, ".CoreCLR.xproj");
-            string projectGuid;
-            if (File.Exists(Path.Combine(serviceFilesRoot, projectFilename)))
+            new PackageReference { Include = "System.Collections",                  Version = "4.0.11" },
+            new PackageReference { Include = "System.Linq",                         Version = "4.1.0" },
+            new PackageReference { Include = "System.Security.Cryptography.Csp",    Version = "4.0.0" },
+            new PackageReference { Include = "Microsoft.CSharp",                    Version = "4.0.1" },
+        };
+        private void GenerateVS2017ProjectFile(string serviceFilesRoot, ProjectFileConfiguration projectFileConfiguration, string assemblyName)
+        {
+            var templateSession = new Dictionary<string, object>();
+
+            templateSession["AssemblyName"]         = assemblyName;
+            templateSession["ProjectReferenceList"] = projectFileConfiguration.ProjectReferences;
+            templateSession["PackageReferenceList"] = defaultPackageReferences;
+            templateSession["TargetFramework"]      = projectFileConfiguration.TargetFrameworkVersion;
+            templateSession["DefineConstants"]      = projectFileConfiguration.CompilationConstants;
+            templateSession["CompileRemoveList"]    = new List<string>
             {
-                Console.WriteLine("...updating existing project file {0}", projectFilename);
-                var projectPath = Path.Combine(serviceFilesRoot, projectFilename);
-                projectGuid = Utils.GetProjectGuid(projectPath);
-            }
-            else
-            {
-                projectGuid = Utils.NewProjectGuid;
-                Console.WriteLine("...creating project file {0}", projectFilename);
-            }
+                "**/_pcl/**",
+                "**/_pcl-sl/**",
+                "**/_bcl35/**",
+                "**/_bcl45/**",
+                "**/_bcl/**",
+                "**/_bcl+sl/**",
+                "**/_bcl+unity/**",
+                "**/_unity/**",
+                "**/_android/**",
+                "**/_ios/**",
+                "**/_pclReference/**",
+                "**/_win8/**",
+                "**/_winPhone81/**",
+                "**/_winPhoneSilverlight8/**",
+                "**/_winstorage/**",
+                "**/Custom/SyncManager/**"
+            };
 
+            var projectJsonTemplate = new VS2017ProjectFile();
+            projectJsonTemplate.Session = templateSession;
 
-            {
-                var templateSession = new Dictionary<string, object>();
-                templateSession["RootNamespace"] = serviceConfiguration.Namespace;
-                templateSession["AssemblyName"] = assemblyName;
-                templateSession["ProjectGuid"] = projectGuid;
+            var content = projectJsonTemplate.TransformText();
 
-                CoreCLRProjectFile projectFileTemplate = new CoreCLRProjectFile();
-                projectFileTemplate.Session = templateSession;
-                var content = projectFileTemplate.TransformText();
-
-                GeneratorDriver.WriteFile(serviceFilesRoot, string.Empty, projectFilename, content);
-            }
-
-            {
-                var templateSession = new Dictionary<string, object>();
-
-                var dependencies = new List<string>();
-                foreach (var dependency in serviceConfiguration.ServiceDependencies.Keys)
-                {
-                    if (string.Equals(dependency, "Core", StringComparison.InvariantCultureIgnoreCase))
-                        continue;
-
-                    dependencies.Add(dependency);
-                }
-
-                templateSession["ServiceDependencies"] = dependencies;
-                templateSession["AssemblyName"] = assemblyName;
-
-                var projectJsonTemplate = new CoreCLRProjectJson();
-                projectJsonTemplate.Session = templateSession;
-
-                var content = projectJsonTemplate.TransformText();
-
-                GeneratorDriver.WriteFile(serviceFilesRoot, string.Empty, "project.json", content);
-            }
-
+            GeneratorDriver.WriteFile(serviceFilesRoot, string.Empty, string.Concat(assemblyName, ".CoreCLR.csproj"), content);
         }
 
         /// <summary>
@@ -313,7 +327,8 @@ namespace ServiceClientGenerator
             {
                 "Properties",
                 "bin",
-                "obj"
+                "obj",
+                ".vs"
             };
 
             // Start with the standard folders for core
@@ -427,8 +442,6 @@ namespace ServiceClientGenerator
                         if (!serviceRelativeFolder.StartsWith(@"\Custom", StringComparison.OrdinalIgnoreCase))
                             continue;
 
-                        
-
                         if (projectFileConfiguration.IsPlatformCodeFolder(serviceRelativeFolder))
                         {
                             if (projectFileConfiguration.IsValidPlatformPathForProject(serviceRelativeFolder))
@@ -479,6 +492,12 @@ namespace ServiceClientGenerator
         {
             public string ProjectGuid { get; set; }
             public IEnumerable<string> ConfigurationPlatforms { get; set; }
+        }
+
+        public class PackageReference
+        {
+            public string Include { get; set; }
+            public string Version { get; set; }
         }
 
     }

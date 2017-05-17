@@ -109,6 +109,15 @@
             "binSubFolder": "unity",
             "template": "UnityProjectFile",
             "platformCodeFolders": [ "_unity", "_bcl+unity" ]
+        },
+        {
+            "name": "CoreCLR",
+            "configurations": [],
+            "targetFramework": "netstandard1.3",
+            "defineConstants" : "$(DefineConstants);CORECLR;AWS_ASYNC_API;ADD_SUPPORT_IORDERED_DICTIONARY;ADD_SUPPORT_ICLONEABLE",
+            "binSubFolder": "",
+            "template": "VS2017ProjectFile",
+            "platformCodeFolders": ["_coreclr"]
         }
     ],
     "unittestprojects":[

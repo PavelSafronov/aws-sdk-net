@@ -12,15 +12,16 @@ namespace ServiceClientGenerator.Generators.ProjectFiles
     using System.Linq;
     using System.Text;
     using System.Collections.Generic;
+    using ServiceClientGenerator;
     using System;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\codebase\v3-master\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRProjectJson.tt"
+    #line 1 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public partial class CoreCLRProjectJson : CoreCLRProjectJsonBase
+    public partial class VS2017ProjectFile : VS2017ProjectFileBase
     {
 #line hidden
         /// <summary>
@@ -28,82 +29,192 @@ namespace ServiceClientGenerator.Generators.ProjectFiles
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("{\r\n  \"version\": \"1.0.0-*\",\r\n  \"description\": \"\",\r\n  \"authors\": [ \"\" ],\r\n\r\n  \"depe" +
-                    "ndencies\": {\r\n");
+            this.Write("<Project Sdk=\"Microsoft.NET.Sdk\">\r\n  <PropertyGroup>\r\n    <TargetFramework>");
             
-            #line 12 "C:\codebase\v3-master\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRProjectJson.tt"
+            #line 9 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.Session["TargetFramework"]));
+            
+            #line default
+            #line hidden
+            this.Write("</TargetFramework>\r\n    <DefineConstants>$(DefineConstants);");
+            
+            #line 10 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.Session["DefineConstants"]));
+            
+            #line default
+            #line hidden
+            this.Write("</DefineConstants>\r\n    <DebugType>portable</DebugType>\r\n    <GenerateDocumentati" +
+                    "onFile>true</GenerateDocumentationFile>\r\n    <AssemblyName>");
+            
+            #line 13 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.Session["AssemblyName"]));
+            
+            #line default
+            #line hidden
+            this.Write("</AssemblyName>\r\n    <PackageId>");
+            
+            #line 14 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.Session["AssemblyName"]));
+            
+            #line default
+            #line hidden
+            this.Write(@"</PackageId>
 
-    if(this.Session.ContainsKey("ServiceDependencies"))
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+  </PropertyGroup>
+
+");
+            
+            #line 26 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+
+    if(this.Session.ContainsKey("CompileRemoveList") && this.Session["CompileRemoveList"] != null)
     {
-        foreach(string dependency in (List<string>)this.Session["ServiceDependencies"])
+
+            
+            #line default
+            #line hidden
+            this.Write("  <ItemGroup>\r\n");
+            
+            #line 31 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+
+        IList<string> compileRemoveList = this.Session["CompileRemoveList"] as IList<string>;
+        foreach(var compileRemoveEntry in compileRemoveList)
         {
 
             
             #line default
             #line hidden
-            this.Write("    \"");
+            this.Write("    <Compile Remove=\"");
             
-            #line 18 "C:\codebase\v3-master\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRProjectJson.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dependency));
+            #line 36 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(compileRemoveEntry.ToString()));
             
             #line default
             #line hidden
-            this.Write("\": \"1.0.0-*\",\r\n");
+            this.Write("\"/>\r\n");
             
-            #line 19 "C:\codebase\v3-master\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRProjectJson.tt"
+            #line 37 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
 
         }
+
+            
+            #line default
+            #line hidden
+            this.Write("  </ItemGroup>\r\n");
+            
+            #line 41 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+
     }
 
             
             #line default
             #line hidden
-            this.Write("    \"Core\": \"1.0.0-*\"\r\n  },\r\n\r\n  \"buildOptions\": {\r\n    \"outputName\": \"");
+            this.Write("\r\n");
             
-            #line 27 "C:\codebase\v3-master\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRProjectJson.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.Session["AssemblyName"]));
+            #line 45 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+
+    if(this.Session.ContainsKey("ProjectReferenceList") && this.Session["ProjectReferenceList"] != null)
+    {
+
             
             #line default
             #line hidden
-            this.Write(@""",
-    ""define"": [ ""CORECLR"", ""AWS_ASYNC_API"" ],
-    ""compile"": {
-      ""exclude"": [
-        ""**/_pcl/*"",
-        ""**/_pcl-sl/*"",
-        ""**/_bcl35/*"",
-        ""**/_bcl45/*"",
-        ""**/_bcl/*"",
-        ""**/_bcl+sl/*"",
-        ""**/_bcl+unity/*"",
-        ""**/_unity/*"",
-        ""**/_android/*"",
-        ""**/_ios/*"",
-        ""**/_pclReference/*"",
-        ""**/_win8/*"",
-        ""**/_winPhone81/*"",
-        ""**/_winPhoneSilverlight8/*"",
-        ""**/_winstorage/*"",
-        ""**/Custom/SyncManager/*""
-      ]
-    },
-	""xmlDoc"": true
-  },
+            this.Write("  <ItemGroup>\r\n");
+            
+            #line 50 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
 
-  ""frameworks"": {
-    ""netstandard1.3"": {
-      ""buildOptions"": {
-        ""define"": [ ""ADD_SUPPORT_IORDERED_DICTIONARY"", ""ADD_SUPPORT_ICLONEABLE"" ]
-      },
-      ""dependencies"": {
-        ""System.Collections"": ""4.0.11"",
-        ""System.Linq"": ""4.1.0"",
-        ""System.Security.Cryptography.Csp"": ""4.0.0"",
-        ""Microsoft.CSharp"": ""4.0.1""
-      }
+        var projectReferenceList = this.Session["ProjectReferenceList"] as IList<ProjectFileCreator.ProjectReference>;
+        foreach(var projectReference in projectReferenceList)
+        {
+
+            
+            #line default
+            #line hidden
+            this.Write("    <ProjectReference Include=\"");
+            
+            #line 55 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(projectReference.IncludePath));
+            
+            #line default
+            #line hidden
+            this.Write("\"/>\r\n");
+            
+            #line 56 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+
+        }
+
+            
+            #line default
+            #line hidden
+            this.Write("  </ItemGroup>\r\n");
+            
+            #line 60 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+
     }
-  }
-}");
+
+            
+            #line default
+            #line hidden
+            
+            #line 63 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+
+    if(this.Session.ContainsKey("PackageReferenceList") && this.Session["PackageReferenceList"] != null)
+    {
+
+            
+            #line default
+            #line hidden
+            this.Write("  <ItemGroup>\r\n");
+            
+            #line 68 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+
+        var packageReferenceList = this.Session["PackageReferenceList"] as IList<ProjectFileCreator.PackageReference>;
+        foreach(var package in packageReferenceList)
+        {
+
+            
+            #line default
+            #line hidden
+            this.Write("    <PackageReference Include=\"");
+            
+            #line 73 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(package.Include));
+            
+            #line default
+            #line hidden
+            this.Write("\" Version=\"");
+            
+            #line 73 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(package.Version));
+            
+            #line default
+            #line hidden
+            this.Write("\"/>\r\n");
+            
+            #line 74 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+
+        }
+
+            
+            #line default
+            #line hidden
+            this.Write("  </ItemGroup>\r\n");
+            
+            #line 78 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\VS2017ProjectFile.tt"
+
+    }
+
+            
+            #line default
+            #line hidden
+            this.Write("</Project>");
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -115,7 +226,7 @@ namespace ServiceClientGenerator.Generators.ProjectFiles
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public class CoreCLRProjectJsonBase
+    public class VS2017ProjectFileBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

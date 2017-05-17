@@ -97,6 +97,8 @@ namespace ServiceClientGenerator
             return GetPlatformFolderName(sourceFolder) != null;
         }
 
+        public IEnumerable<ProjectFileCreator.ProjectReference> ProjectReferences { get; set; }
+
         /// <summary>
         /// Returns true if the specified folder ends with one of the custom code
         /// platform folder names declared for this configuration.

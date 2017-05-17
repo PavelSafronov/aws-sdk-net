@@ -1,0 +1,81 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="ServiceClientGenerator" #>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework><#=this.Session["TargetFramework"]#></TargetFramework>
+    <DefineConstants>$(DefineConstants);<#=this.Session["DefineConstants"]#></DefineConstants>
+    <DebugType>portable</DebugType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName><#=this.Session["AssemblyName"]#></AssemblyName>
+    <PackageId><#=this.Session["AssemblyName"]#></PackageId>
+
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+  </PropertyGroup>
+
+<#
+    if(this.Session.ContainsKey("CompileRemoveList") && this.Session["CompileRemoveList"] != null)
+    {
+#>
+  <ItemGroup>
+<#
+        IList<string> compileRemoveList = this.Session["CompileRemoveList"] as IList<string>;
+        foreach(var compileRemoveEntry in compileRemoveList)
+        {
+#>
+    <Compile Remove="<#=compileRemoveEntry.ToString()#>"/>
+<#
+        }
+#>
+  </ItemGroup>
+<#
+    }
+#>
+
+<#
+    if(this.Session.ContainsKey("ProjectReferenceList") && this.Session["ProjectReferenceList"] != null)
+    {
+#>
+  <ItemGroup>
+<#
+        var projectReferenceList = this.Session["ProjectReferenceList"] as IList<ProjectFileCreator.ProjectReference>;
+        foreach(var projectReference in projectReferenceList)
+        {
+#>
+    <ProjectReference Include="<#=projectReference.IncludePath#>"/>
+<#
+        }
+#>
+  </ItemGroup>
+<#
+    }
+#>
+<#
+    if(this.Session.ContainsKey("PackageReferenceList") && this.Session["PackageReferenceList"] != null)
+    {
+#>
+  <ItemGroup>
+<#
+        var packageReferenceList = this.Session["PackageReferenceList"] as IList<ProjectFileCreator.PackageReference>;
+        foreach(var package in packageReferenceList)
+        {
+#>
+    <PackageReference Include="<#=package.Include#>" Version="<#=package.Version#>"/>
+<#
+        }
+#>
+  </ItemGroup>
+<#
+    }
+#>
+</Project>
