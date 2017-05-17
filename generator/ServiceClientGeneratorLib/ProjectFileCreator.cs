@@ -124,8 +124,11 @@ namespace ServiceClientGenerator
             {
                 if (projectFileConfiguration.Template.Equals("VS2017ProjectFile", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    projectFileConfiguration.ProjectReferences = projectReferenceList;
-                    GenerateVS2017ProjectFile(serviceFilesRoot, projectFileConfiguration, assemblyName);
+                    if (serviceConfiguration.CoreCLRSupport)
+                    {
+                        projectFileConfiguration.ProjectReferences = projectReferenceList;
+                        GenerateVS2017ProjectFile(serviceFilesRoot, projectFileConfiguration, assemblyName);
+                    }
                     continue;
                 }   
 

@@ -106,9 +106,6 @@ namespace ServiceClientGenerator
                     GetProjectConfig(ProjectTypes.Unity)
                 };
 
-            // build one uber-solution for every project and platform
-            GenerateAllPlatformsSolution("AWSSDK.All.sln", ProjectFileConfigurations);
-
             GenerateCombinedSolution("AWSSDK.Desktop.sln", true, desktopProjectConfigs);
             GenerateCombinedSolution("AWSSDK.PCL.sln", true, pclProjectConfigs);
             GenerateCombinedSolution("AWSSDK.Unity.sln", false, unityProjectConfigs);
@@ -429,9 +426,6 @@ namespace ServiceClientGenerator
             var sdkSourceFolder = Path.Combine(Options.SdkRootFolder, GeneratorDriver.SourceSubFoldername);
             var session = new Dictionary<string, object>();
 
-            var coreProjectsRoot = Path.Combine(sdkSourceFolder, GeneratorDriver.CoreSubFoldername);
-            var coreProjects = new List<Project>() { CoreProjectFromFile(Path.Combine(coreProjectsRoot, "AWSSDK.Core.CoreCLR.xproj")) };
-            session["CoreProjects"] = coreProjects;
             session["IncludeTests"] = includeTests;
 
             var buildConfigurations = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -451,9 +445,13 @@ namespace ServiceClientGenerator
                     continue;
                 }
 
-                foreach (var projectFile in Directory.GetFiles(servicePath, "*CoreCLR.xproj", SearchOption.TopDirectoryOnly))
+                foreach (var projectFile in Directory.GetFiles(servicePath, "*.CoreCLR.csproj", SearchOption.TopDirectoryOnly))
                 {
-                    folder.Projects.Add(ServiceProjectFromFile(di.Name, projectFile));
+                    folder.Projects.Add(new Project {
+                        Name = Path.GetFileNameWithoutExtension(projectFile),
+                        ProjectPath = string.Format(@"src\Services\{0}\{1}", di.Name, Path.GetFileName(projectFile)),
+                        ProjectGuid = Guid.NewGuid().ToString("B").ToUpper(),
+                    });
                     SelectProjectAndConfigurationsForSolution(projectFile, solutionProjects, buildConfigurations);
                 }
 
@@ -720,6 +718,7 @@ namespace ServiceClientGenerator
             public string ProjectGuid { get; set; }
             public string ProjectPath { get; set; }
             public string Name { get; set; }
+            public string FolderGuid { get; set; }
         }
 
         public class ServiceSolutionFolder

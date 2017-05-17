@@ -29,58 +29,26 @@ namespace ServiceClientGenerator.Generators.ProjectFiles
         public virtual string TransformText()
         {
             this.Write(@"Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project(""{2150E333-8FDC-42A3-9474-1A3956D46DE8}"") = ""src"", ""src"", ""{A49B31CF-83ED-4FF2-9301-66AB909C4896}""
+Project(""{2150E333-8FDC-42A3-9474-1A3956D46DE8}"") = ""Test"", ""Test"", ""{12EC4E4B-7E2C-4B63-8EF9-7B959F82A89B}""
 EndProject
-Project(""{2150E333-8FDC-42A3-9474-1A3956D46DE8}"") = ""test"", ""test"", ""{04014228-E2FE-4596-ABD2-905404177293}""
+Project(""{9A19103F-16F7-4668-BE54-9A1E7A4F7556}"") = ""UnitTests"", ""test\CoreCLR\UnitTests\UnitTests.csproj"", ""{A239CA38-0B52-4109-A8CC-B20D03C13624}""
 EndProject
-Project(""{2150E333-8FDC-42A3-9474-1A3956D46DE8}"") = ""Solution Items"", ""Solution Items"", ""{9C8582E9-CD47-4721-A94C-1DF7DF6DFCFA}""
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
+Project(""{9A19103F-16F7-4668-BE54-9A1E7A4F7556}"") = ""IntegrationTests"", ""test\CoreCLR\IntegrationTests\IntegrationTests.csproj"", ""{9EE28148-4031-4021-B3E1-28D1FBE4ED7F}""
 EndProject
-Project(""{2150E333-8FDC-42A3-9474-1A3956D46DE8}"") = ""Core"", ""Core"", ""{1523203C-CD16-4B4A-8F9D-8ECCA3A327AA}""
+
+Project(""{2150E333-8FDC-42A3-9474-1A3956D46DE8}"") = ""Core"", ""Core"", ""{9863FCB3-BFA4-4B9C-B8F6-302BA5F660B8}""
 EndProject
-Project(""{2150E333-8FDC-42A3-9474-1A3956D46DE8}"") = ""Services"", ""Services"", ""{03245B8D-0A27-4C11-9AAC-7047A9F6DFB0}""
+Project(""{9A19103F-16F7-4668-BE54-9A1E7A4F7556}"") = ""AWSSDK.Core.CoreCLR"", ""src\Core\AWSSDK.Core.CoreCLR.csproj"", ""{63B1C0D6-FA80-4AD7-A4F0-BADC035F53E6}""
+EndProject
+
+Project(""{2150E333-8FDC-42A3-9474-1A3956D46DE8}"") = ""Services"", ""Services"", ""{939EC5C2-8345-43E2-8F97-72EEEBEEA0AB}""
 EndProject
 ");
             
-            #line 23 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-
-    foreach(var project in (List<SolutionFileCreator.Project>)this.Session["CoreProjects"])
-    {
-
-            
-            #line default
-            #line hidden
-            this.Write("Project(\"{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}\") = \"");
-            
-            #line 27 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(project.Name));
-            
-            #line default
-            #line hidden
-            this.Write("\", \"");
-            
-            #line 27 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectPath));
-            
-            #line default
-            #line hidden
-            this.Write("\", \"");
-            
-            #line 27 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectGuid));
-            
-            #line default
-            #line hidden
-            this.Write("\"\r\nEndProject\r\n");
-            
-            #line 29 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-
-    }
+            #line 24 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
 
     foreach(var folder in (List<SolutionFileCreator.ServiceSolutionFolder>)this.Session["ServiceSolutionFolders"])
     {
@@ -90,22 +58,54 @@ EndProject
             #line hidden
             this.Write("Project(\"{2150E333-8FDC-42A3-9474-1A3956D46DE8}\") = \"");
             
-            #line 35 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            #line 28 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(folder.Name));
             
             #line default
             #line hidden
             this.Write("\", \"");
             
-            #line 35 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            #line 28 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(folder.Name));
             
             #line default
             #line hidden
             this.Write("\", \"");
             
-            #line 35 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            #line 28 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(folder.ProjectGuid));
+            
+            #line default
+            #line hidden
+            this.Write("\"\r\nEndProject\r\n");
+            
+            #line 30 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+
+
+        foreach(var project in folder.Projects)
+        { 
+
+            
+            #line default
+            #line hidden
+            this.Write("Project(\"{9A19103F-16F7-4668-BE54-9A1E7A4F7556}\") = \"");
+            
+            #line 35 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(project.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\", \"");
+            
+            #line 35 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectPath));
+            
+            #line default
+            #line hidden
+            this.Write("\", \"");
+            
+            #line 35 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectGuid));
             
             #line default
             #line hidden
@@ -113,173 +113,74 @@ EndProject
             
             #line 37 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
 
-
-        foreach(var project in folder.Projects)
-        { 
-
-            
-            #line default
-            #line hidden
-            this.Write("Project(\"{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}\") = \"");
-            
-            #line 42 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(project.Name));
-            
-            #line default
-            #line hidden
-            this.Write("\", \"");
-            
-            #line 42 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectPath));
-            
-            #line default
-            #line hidden
-            this.Write("\", \"");
-            
-            #line 42 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectGuid));
-            
-            #line default
-            #line hidden
-            this.Write("\"\r\nEndProject\r\n");
-            
-            #line 44 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-
         }
     }
 
             
             #line default
             #line hidden
-            
-            #line 48 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-
-	if ((bool) this.Session["IncludeTests"])
-	{
-
-            
-            #line default
-            #line hidden
-            this.Write(@"Project(""{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}"") = ""IntegrationTests"", ""test\CoreCLR\IntegrationTests\IntegrationTests.xproj"", ""{456D916F-371A-4E73-BA12-73199057C773}""
-EndProject
-Project(""{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}"") = ""UnitTests"", ""test\CoreCLR\UnitTests\UnitTests.xproj"", ""{D65E5A13-9315-4F1A-9C01-B8F51CAEC362}""
-EndProject
-");
-            
-            #line 56 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-
-	}
-
-            
-            #line default
-            #line hidden
-            this.Write(@"Global
+            this.Write(@"
+Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A239CA38-0B52-4109-A8CC-B20D03C13624}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A239CA38-0B52-4109-A8CC-B20D03C13624}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A239CA38-0B52-4109-A8CC-B20D03C13624}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A239CA38-0B52-4109-A8CC-B20D03C13624}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63B1C0D6-FA80-4AD7-A4F0-BADC035F53E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63B1C0D6-FA80-4AD7-A4F0-BADC035F53E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63B1C0D6-FA80-4AD7-A4F0-BADC035F53E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63B1C0D6-FA80-4AD7-A4F0-BADC035F53E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EE28148-4031-4021-B3E1-28D1FBE4ED7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EE28148-4031-4021-B3E1-28D1FBE4ED7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EE28148-4031-4021-B3E1-28D1FBE4ED7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EE28148-4031-4021-B3E1-28D1FBE4ED7F}.Release|Any CPU.Build.0 = Release|Any CPU
 ");
             
-            #line 68 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-
-    foreach(var project in (List<SolutionFileCreator.Project>)this.Session["CoreProjects"])
-    {
-
-            
-            #line default
-            #line hidden
-            this.Write("\t\t");
-            
-            #line 72 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectGuid));
-            
-            #line default
-            #line hidden
-            this.Write(".Debug|Any CPU.ActiveCfg = Debug|Any CPU\r\n\t\t");
-            
-            #line 73 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectGuid));
-            
-            #line default
-            #line hidden
-            this.Write(".Debug|Any CPU.Build.0 = Debug|Any CPU\r\n\t\t");
-            
-            #line 74 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectGuid));
-            
-            #line default
-            #line hidden
-            this.Write(".Release|Any CPU.ActiveCfg = Release|Any CPU\r\n\t\t");
-            
-            #line 75 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectGuid));
-            
-            #line default
-            #line hidden
-            this.Write(".Release|Any CPU.Build.0 = Release|Any CPU\r\n");
-            
-            #line 76 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-
-    }
+            #line 60 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
 
     foreach(var folder in (List<SolutionFileCreator.ServiceSolutionFolder>)this.Session["ServiceSolutionFolders"])
     {
-
-            
-            #line default
-            #line hidden
-            this.Write("\t\t");
-            
-            #line 82 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(folder.ProjectGuid));
-            
-            #line default
-            #line hidden
-            this.Write(" = {03245B8D-0A27-4C11-9AAC-7047A9F6DFB0}\r\n");
-            
-            #line 83 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-
         foreach(var project in folder.Projects)
-        { 
+        {
 
             
             #line default
             #line hidden
             this.Write("\t\t");
             
-            #line 87 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            #line 66 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectGuid));
             
             #line default
             #line hidden
             this.Write(".Debug|Any CPU.ActiveCfg = Debug|Any CPU\r\n\t\t");
             
-            #line 88 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            #line 67 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectGuid));
             
             #line default
             #line hidden
             this.Write(".Debug|Any CPU.Build.0 = Debug|Any CPU\r\n\t\t");
             
-            #line 89 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            #line 68 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectGuid));
             
             #line default
             #line hidden
             this.Write(".Release|Any CPU.ActiveCfg = Release|Any CPU\r\n\t\t");
             
-            #line 90 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            #line 69 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectGuid));
             
             #line default
             #line hidden
             this.Write(".Release|Any CPU.Build.0 = Release|Any CPU\r\n");
             
-            #line 91 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            #line 70 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
 
         }
     }
@@ -287,28 +188,17 @@ EndProject
             
             #line default
             #line hidden
-            this.Write("\tEndGlobalSection\t\r\n\r\n\tGlobalSection(NestedProjects) = preSolution\r\n");
+            this.Write(@"	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A239CA38-0B52-4109-A8CC-B20D03C13624} = {12EC4E4B-7E2C-4B63-8EF9-7B959F82A89B}
+		{63B1C0D6-FA80-4AD7-A4F0-BADC035F53E6} = {9863FCB3-BFA4-4B9C-B8F6-302BA5F660B8}
+		{9EE28148-4031-4021-B3E1-28D1FBE4ED7F} = {12EC4E4B-7E2C-4B63-8EF9-7B959F82A89B}
+");
             
-            #line 98 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-
-    foreach(var project in (List<SolutionFileCreator.Project>)this.Session["CoreProjects"])
-    {
-
-            
-            #line default
-            #line hidden
-            this.Write("\t\t");
-            
-            #line 102 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectGuid));
-            
-            #line default
-            #line hidden
-            this.Write(" = {1523203C-CD16-4B4A-8F9D-8ECCA3A327AA}\r\n");
-            
-            #line 103 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-
-    }
+            #line 82 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
 
     foreach(var folder in (List<SolutionFileCreator.ServiceSolutionFolder>)this.Session["ServiceSolutionFolders"])
     {
@@ -318,14 +208,14 @@ EndProject
             #line hidden
             this.Write("\t\t");
             
-            #line 109 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            #line 86 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(folder.ProjectGuid));
             
             #line default
             #line hidden
-            this.Write(" = {03245B8D-0A27-4C11-9AAC-7047A9F6DFB0}\r\n");
+            this.Write(" = {939EC5C2-8345-43E2-8F97-72EEEBEEA0AB}\r\n");
             
-            #line 110 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            #line 87 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
 
         foreach(var project in folder.Projects)
         { 
@@ -335,21 +225,21 @@ EndProject
             #line hidden
             this.Write("\t\t");
             
-            #line 114 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            #line 91 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(project.ProjectGuid));
             
             #line default
             #line hidden
             this.Write(" = ");
             
-            #line 114 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            #line 91 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(folder.ProjectGuid));
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 115 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
+            #line 92 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
 
         }
     }
@@ -357,30 +247,7 @@ EndProject
             
             #line default
             #line hidden
-            this.Write("\t\t{1523203C-CD16-4B4A-8F9D-8ECCA3A327AA} = {A49B31CF-83ED-4FF2-9301-66AB909C4896}" +
-                    "\r\n\t\t{03245B8D-0A27-4C11-9AAC-7047A9F6DFB0} = {A49B31CF-83ED-4FF2-9301-66AB909C48" +
-                    "96}\r\n");
-            
-            #line 121 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-
-	if ((bool) this.Session["IncludeTests"])
-	{
-
-            
-            #line default
-            #line hidden
-            this.Write("\t\t{456D916F-371A-4E73-BA12-73199057C773} = {04014228-E2FE-4596-ABD2-905404177293}" +
-                    "\r\n\t\t{D65E5A13-9315-4F1A-9C01-B8F51CAEC362} = {04014228-E2FE-4596-ABD2-9054041772" +
-                    "93}\r\n");
-            
-            #line 127 "D:\workspace\AWSDotNetPublic\generator\ServiceClientGeneratorLib\Generators\ProjectFiles\CoreCLRSolutionFile.tt"
-
-	}
-
-            
-            #line default
-            #line hidden
-            this.Write("\tEndGlobalSection\r\nEndGlobal");
+            this.Write("\tEndGlobalSection\r\nEndGlobal\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }
