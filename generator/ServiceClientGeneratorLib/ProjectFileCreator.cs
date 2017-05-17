@@ -264,21 +264,12 @@ namespace ServiceClientGenerator
             GeneratorDriver.WriteFile(serviceFilesRoot, string.Empty, projectFilename, generatedContent);
             projectConfiguration.ConfigurationPlatforms = projectFileConfiguration.Configurations;
         }
-
-        private static List<PackageReference> defaultPackageReferences = new List<PackageReference>
-        {
-            new PackageReference { Include = "System.Collections",                  Version = "4.0.11" },
-            new PackageReference { Include = "System.Linq",                         Version = "4.1.0" },
-            new PackageReference { Include = "System.Security.Cryptography.Csp",    Version = "4.0.0" },
-            new PackageReference { Include = "Microsoft.CSharp",                    Version = "4.0.1" },
-        };
         private void GenerateVS2017ProjectFile(string serviceFilesRoot, ProjectFileConfiguration projectFileConfiguration, string assemblyName)
         {
             var templateSession = new Dictionary<string, object>();
 
             templateSession["AssemblyName"]         = assemblyName;
             templateSession["ProjectReferenceList"] = projectFileConfiguration.ProjectReferences;
-            templateSession["PackageReferenceList"] = defaultPackageReferences;
             templateSession["TargetFramework"]      = projectFileConfiguration.TargetFrameworkVersion;
             templateSession["DefineConstants"]      = projectFileConfiguration.CompilationConstants;
             templateSession["CompileRemoveList"]    = new List<string>

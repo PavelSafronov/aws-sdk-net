@@ -39,10 +39,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\AWSSDK.Core.CoreCLR.csproj"/>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="System.Collections" Version="4.0.11"/>
-    <PackageReference Include="System.Linq" Version="4.1.0"/>
-    <PackageReference Include="System.Security.Cryptography.Csp" Version="4.0.0"/>
-    <PackageReference Include="Microsoft.CSharp" Version="4.0.1"/>
-  </ItemGroup>
 </Project>
