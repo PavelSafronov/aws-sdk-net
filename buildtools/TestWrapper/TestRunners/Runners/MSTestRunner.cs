@@ -30,12 +30,13 @@ namespace TestWrapper
         protected override ResultsSummary Run(IEnumerable<string> tests)
         {
             var args = ConstructArguments(tests);
-            var output = InvokeTestSuite(args);
-            var summary = ParseMSTestOutput(output);
+            string output;
+            int exitCode = InvokeTestSuite(args, out output);
+            var summary = ParseMSTestOutput(exitCode, output);
             return summary;
         }
 
-        private ResultsSummary ParseMSTestOutput(string output)
+        private ResultsSummary ParseMSTestOutput(int exitCode, string output)
         {
             bool foundSummary = false;
             string line = null;
@@ -86,7 +87,7 @@ namespace TestWrapper
                 CopyResultFile(resultsFile);
             }
 
-            return new ResultsSummary(output, failedTests, passed, failed, 0);
+            return new ResultsSummary(exitCode, output, failedTests, passed, failed, 0);
         }
         private void CopyResultFile(string resultsFile)
         {

@@ -70,6 +70,12 @@ namespace TestWrapper.TestRunners
                     Console.WriteLine(summary);
                     Console.WriteLine("=======================");
 
+                    if (summary.ExitCode != 0)
+                    {
+                        consecutiveFailureCount++;
+                        prevFailedTestCount = summary.Failed;
+                    }
+
                     var anyRan = summary.Passed > 0 || summary.Failed > 0;
                     if (!anyRan)
                     {
@@ -130,7 +136,7 @@ namespace TestWrapper.TestRunners
                 return arg;
         }
 
-        protected string InvokeTestSuite(string args)
+        protected int InvokeTestSuite(string args, out string log)
         {
             var workingDir = WorkingDirectory.FullName;
             var file = TestSuiteExecutable.FullName;
@@ -205,8 +211,10 @@ namespace TestWrapper.TestRunners
                 if (exitCode != 0)
                     writer.WriteLine("Exit code = {0}", exitCode);
 
-                return writer.ToString();
+                log = writer.ToString();
             }
+
+            return exitCode;
         }
         private static DataReceivedEventHandler LogMultiple(TextWriter consoleWriter, StringWriter stringWriter)
         {

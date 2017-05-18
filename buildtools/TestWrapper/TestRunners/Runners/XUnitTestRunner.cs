@@ -25,8 +25,9 @@ namespace TestWrapper
         protected override ResultsSummary Run(IEnumerable<string> tests)
         {
             var args = ConstructArguments(tests);
-            var log = InvokeTestSuite(args);
-            var summary = ParseLog(log);
+            string log;
+            int exitCode = InvokeTestSuite(args, out log);
+            var summary = ParseLog(exitCode, log);
             return summary;
         }
 
@@ -36,7 +37,7 @@ namespace TestWrapper
 
             // add test switch
             components.Add("test");
-            
+
             // add container
             components.Add(GetContainerArg(TestContainer.FullName));
 
@@ -44,17 +45,20 @@ namespace TestWrapper
             components.Add(GetConfigArg(Configuration));
 
             // add specific tests
+            string filter = null;
             var testsList = tests.ToList();
             if (testsList.Count > 0)
             {
-                var testsArgs = tests.Select(GetTestArg);
-                components.AddRange(testsArgs);
+                filter = string.Join("|", tests.Select(GetTestArg));
             }
-            // if there are no specific tests, add categories
             else if (Categories != null && Categories.Length > 0)
             {
-                var categoryArgs = Categories.Select(GetCategoryArg);
-                components.AddRange(categoryArgs);
+                filter = string.Join("|", Categories.Select(GetCategoryArg));
+            }
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                components.Add(string.Format("--filter \"{0}\"", filter));
             }
 
             var args = string.Join(" ", components);
@@ -66,32 +70,30 @@ namespace TestWrapper
         }
         private static string GetTestArg(string testName)
         {
-            return string.Format("-method {0}", QuoteArg(testName));
+            return string.Format("FullyQualifiedName={0}", QuoteArg(testName));
         }
         private static string GetCategoryArg(string categoryName)
         {
-            var categoryEquals = string.Format("Category={0}", categoryName);
-            return string.Format("-trait {0}", QuoteArg(categoryEquals));
+            return string.Format("Category={0}", categoryName);
         }
         private static string GetConfigArg(TestConfiguration config)
         {
             return string.Format("-c {0}", QuoteArg(config.ToString()));
         }
 
-        private static ResultsSummary ParseLog(string log)
+        private static ResultsSummary ParseLog(int exitCode, string log)
         {
             string[] lines = log.Trim().Split('\n');
             List<string> failedTests = GetFailedTests(lines);
             int passed = 0, failed = 0, skipped = 0;
             ExtractSummary(lines, out passed, out failed, out skipped);
-            return new ResultsSummary(log, failedTests, passed, failed, skipped);
+            return new ResultsSummary(exitCode, log, failedTests, passed, failed, skipped);
         }
 
-        private static Regex summaryRegex = new Regex(@"Total:\s*(\d*).*Errors:\s*(\d*).*Failed:\s*(\d*).*Skipped:\s*(\d*).*");
+        private static Regex summaryRegex = new Regex(@"Total tests:\s*(\d*).*Failed:\s*(\d*).*Skipped:\s*(\d*).*");
         private static void ExtractSummary(string[] lines, out int passedCount, out int failedCount, out int skippedCount)
         {
             int total = 0;
-            int errors = 0;
             int failed = 0;
             int skipped = 0;
 
@@ -108,19 +110,18 @@ namespace TestWrapper
                 if (match.Success)
                 {
                     total = Int32.Parse(match.Groups[1].ToString());
-                    errors = Int32.Parse(match.Groups[2].ToString());
-                    failed = Int32.Parse(match.Groups[3].ToString());
-                    skipped = Int32.Parse(match.Groups[4].ToString());
+                    failed = Int32.Parse(match.Groups[2].ToString());
+                    skipped = Int32.Parse(match.Groups[3].ToString());
                     break;
                 }
             }
-            passedCount = total - errors - failed;
-            failedCount = errors + failed;
+            passedCount = total - failed;
+            failedCount = failed;
             skippedCount = skipped;
         }
 
 
-        private static Regex failedTestNameRegex = new Regex(@"\s*([\d\w\.]*).*\[FAIL\]");
+        private static Regex failedTestNameRegex = new Regex(@"\[.*\]\s*([\d\w\.]*).*\[FAIL\]");
         private static string ExtractFailedTestName(string line)
         {
             Match match = failedTestNameRegex.Match(line);
