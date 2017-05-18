@@ -45,6 +45,7 @@
                 <DesktopSolutionsFile>AWSSDK.Desktop.sln</DesktopSolutionsFile>
                 <PCLSolutionsFile>AWSSDK.PCL.sln</PCLSolutionsFile>
                 <UnitySolutionsFile>AWSSDK.Unity.sln</UnitySolutionsFile>
+                <CoreCLRSolutionFile>AWSSDK.CoreCLR.sln</CoreCLRSolutionFile>
                 <GeneratorPartialBuildArgument></GeneratorPartialBuildArgument>
                 <ReferenceServiceDLLs>false</ReferenceServiceDLLs>
                 <FxCop35TargetFileName>SDK-3.5.FxCop</FxCop35TargetFileName>
@@ -58,6 +59,7 @@
                 <DesktopSolutionsFile>Build.Desktop.partial.sln</DesktopSolutionsFile>
                 <PCLSolutionsFile>Build.PCL.partial.sln</PCLSolutionsFile>
                 <UnitySolutionsFile>AWSSDK.Unity.sln</UnitySolutionsFile>
+                <CoreCLRSolutionFile>AWSSDK.CoreCLR.sln</CoreCLRSolutionFile>
                 <GeneratorPartialBuildArgument>--partial-build-list $(PartialBuildList)</GeneratorPartialBuildArgument>
                 <ReferenceServiceDLLs>true</ReferenceServiceDLLs>
                 <FxCop35TargetFileName>SDK-3.5.partial.FxCop</FxCop35TargetFileName>
@@ -168,19 +170,23 @@
             Properties="Configuration=$(Configuration);AWSKeyFile=$(CustomSnkFileLocation);ResolveNuGetPackages=false" />
     </Target>
 
-	<Target Name="build-sdk-coreclr" DependsOnTargets="GetSDKToolingInfoTarget">
-        <!-- depends: restore-nuget;run-generator -->
-        <Exec Command="&quot;$(SDKToolingExe)&quot; restore" 
-            WorkingDirectory="..\sdk"/>
+    <Target Name="build-sdk-coreclr" DependsOnTargets="GetSDKToolingInfoTarget">
+        <Exec Command="&quot;$(SDKToolingExe)&quot; clean $(CoreCLRSolutionFile)"   WorkingDirectory="..\sdk"/>
+        <Exec Command="&quot;$(SDKToolingExe)&quot; clean"                          WorkingDirectory="..\sdk\test\CoreCLR\IntegrationTests"/>
+        <Exec Command="&quot;$(SDKToolingExe)&quot; clean"                          WorkingDirectory="..\sdk\test\CoreCLR\UnitTests"/>
 
-		<Message Text="Compile the CoreCLR version of the SDK"/>
-		<Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration) --no-incremental" 
-			WorkingDirectory="..\sdk\test\CoreCLR\IntegrationTests"/>
+        <Message Text="Restore and compile CoreCLR version of the SDK"/>
+        <Exec Command="&quot;$(SDKToolingExe)&quot; restore $(CoreCLRSolutionFile)" WorkingDirectory="..\sdk"/>
+        <Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration) --no-incremental $(CoreCLRSolutionFile)" WorkingDirectory="..\sdk"/>
 
-		<Message Text="Compile CoreCLR unit tests"/>
-		<Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration) --no-incremental" 
-			WorkingDirectory="..\sdk\test\CoreCLR\UnitTests"/>
-	</Target>
+        <Message Text="Restore and compile CoreCLR integ tests"/>
+        <Exec Command="&quot;$(SDKToolingExe)&quot; restore"                    WorkingDirectory="..\sdk\test\CoreCLR\IntegrationTests"/>
+        <Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration)"  WorkingDirectory="..\sdk\test\CoreCLR\IntegrationTests"/>
+        
+        <Message Text="Restore and compile CoreCLR unit tests"/>
+        <Exec Command="&quot;$(SDKToolingExe)&quot; restore"                    WorkingDirectory="..\sdk\test\CoreCLR\UnitTests"/>
+        <Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration)"  WorkingDirectory="..\sdk\test\CoreCLR\UnitTests"/>
+    </Target>
 	
 	<Target Name="build-sdk-unity" DependsOnTargets="restore-nuget;run-generator" Condition="!$(DisableUnitySupport)">
 		<Message Text="Compile the Unity SDK"/>
@@ -224,7 +230,7 @@
             />
         <XUnitWrapperTask
             TestSuiteRunner="$(SDKToolingExe)"
-            TestContainer="..\sdk\test\CoreCLR\UnitTests\project.json"
+            TestContainer="..\sdk\test\CoreCLR\UnitTests\UnitTests.csproj"
             Configuration="$(Configuration)"
             Categories="$(CoreCLRTestCategories)"
             />
@@ -241,7 +247,7 @@
 
         <XUnitWrapperTask
             TestSuiteRunner="$(SDKToolingExe)"
-            TestContainer="..\sdk\test\CoreCLR\IntegrationTests\project.json"
+            TestContainer="..\sdk\test\CoreCLR\IntegrationTests\IntegrationTests.csproj"
             Configuration="$(Configuration)"
             Categories="$(IntegCategoriesToTest)"
             />
