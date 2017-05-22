@@ -351,23 +351,20 @@
 	</Target>
 	
 	
-	<Target Name="build-netcore-extensions" DependsOnTargets="build-sdk-coreclr;GetSDKToolingInfoTarget">
-	
-		<!-- depends: restore-nuget;run-generator -->
-		<Exec Command="&quot;$(SDKToolingExe)&quot; restore" 
-			WorkingDirectory="..\extensions"/>		
-			
-		<Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration)" 
-			WorkingDirectory="..\extensions\test\NETCore.SetupTests"/>		
-			
+    <Target Name="build-netcore-extensions" DependsOnTargets="GetSDKToolingInfoTarget">
+        <!-- depends: restore-nuget;run-generator -->
+        <Exec Command="&quot;$(SDKToolingExe)&quot; clean"      WorkingDirectory="..\extensions"/>
+        <Exec Command="&quot;$(SDKToolingExe)&quot; restore"    WorkingDirectory="..\extensions"/>
+        <Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration)" WorkingDirectory="..\extensions"/>
+
 		<Message Text="Build and Test .NET Core Setup Extension"/>
 		<XUnitWrapperTask
 			TestSuiteRunner="$(SDKToolingExe)"
-			TestContainer="..\extensions\test\NETCore.SetupTests\project.json"
+			TestContainer="..\extensions\test\NETCore.SetupTests\NETCore.SetupTests.csproj"
 			Configuration="$(Configuration)"
 			/>
 			
-	</Target>	
+	</Target>
 	
 	<Target Name="package-netcore-extensions" DependsOnTargets="build-netcore-extensions">
         <MakeDir Directories="..\Deployment\nuget" />
