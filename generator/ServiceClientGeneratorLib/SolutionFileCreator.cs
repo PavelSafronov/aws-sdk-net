@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using System.Text.RegularExpressions;
+
 using ServiceClientGenerator.Generators.ProjectFiles;
 using System.Xml;
 
@@ -420,9 +422,39 @@ namespace ServiceClientGenerator
             GeneratorDriver.WriteFile(Options.SdkRootFolder, null, solutionFileName, content, true, false);
         }
 
+        private static IDictionary<string, string> GetItemGuidDictionary(string solutionsFilePath)
+        {
+            IDictionary<string, string> itemGuidDictionary = new Dictionary<string, string>();
+
+            if (File.Exists(solutionsFilePath))
+            {
+                Regex expression = new Regex(@"Project\(""{(.*)}""\)\s*=\s*""(.*)"",\s*""(.*)"",\s*""(.*)""");
+                foreach (string line in File.ReadAllLines(solutionsFilePath))
+                {
+                    Match match = expression.Match(line);
+                    if (match.Success)
+                    {
+                        string itemType = match.Groups[1].ToString();
+                        string itemName = match.Groups[2].ToString();
+                        string itemSource = match.Groups[3].ToString();
+                        string itemGuid = match.Groups[4].ToString();
+
+                        itemGuidDictionary.Add(itemName, itemGuid);
+                    }
+                }
+            }
+            return itemGuidDictionary;
+        }
+
 
         private void GenerateCoreCLRSolution(string solutionFileName, bool includeTests, ICollection<string> serviceProjectsForPartialBuild = null)
         {
+            //
+            // Since vs2017 .csproj files are not identified by guid, see if we can scan and determine the guid ahead of time to reduce changes
+            // to .sln files if possible.
+            //
+            IDictionary<string, string> projectGuidDictionary = GetItemGuidDictionary(Path.Combine(Options.SdkRootFolder, solutionFileName));
+
             var sdkSourceFolder = Path.Combine(Options.SdkRootFolder, GeneratorDriver.SourceSubFoldername);
             var session = new Dictionary<string, object>();
 
@@ -447,10 +479,11 @@ namespace ServiceClientGenerator
 
                 foreach (var projectFile in Directory.GetFiles(servicePath, "*.CoreCLR.csproj", SearchOption.TopDirectoryOnly))
                 {
+                    string projectName = Path.GetFileNameWithoutExtension(projectFile);
                     folder.Projects.Add(new Project {
-                        Name = Path.GetFileNameWithoutExtension(projectFile),
+                        Name = projectName,
                         ProjectPath = string.Format(@"src\Services\{0}\{1}", di.Name, Path.GetFileName(projectFile)),
-                        ProjectGuid = Guid.NewGuid().ToString("B").ToUpper(),
+                        ProjectGuid = projectGuidDictionary.ContainsKey(projectName) ? projectGuidDictionary[projectName] : Guid.NewGuid().ToString("B").ToUpper()
                     });
                     SelectProjectAndConfigurationsForSolution(projectFile, solutionProjects, buildConfigurations);
                 }
