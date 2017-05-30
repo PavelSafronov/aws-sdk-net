@@ -168,7 +168,12 @@ namespace TestWrapper.TestRunners
                 p.Start();
                 p.BeginOutputReadLine();
                 p.BeginErrorReadLine();
-                p.WaitForExit((int)MAX_SINGLE_EXEC_TIME.TotalMilliseconds);
+                
+                if (p.WaitForExit((int)MAX_SINGLE_EXEC_TIME.TotalMilliseconds))
+                {
+                    p.WaitForExit();
+                }
+
 
                 output = outWriter.ToString();
                 error = errWriter.ToString();
@@ -198,6 +203,8 @@ namespace TestWrapper.TestRunners
                         throw new InvalidOperationException(message);
                     }
                 }
+
+                p.Close();
             }
 
             using (var writer = new StringWriter())

@@ -121,11 +121,9 @@ namespace TestWrapper
         }
 
 
-        private static Regex failedTestNameRegex = new Regex(@"\[.*\]\s*([\d\w\.]*).*\[FAIL\]");
         private static string ExtractFailedTestName(string line)
         {
-            Match match = failedTestNameRegex.Match(line);
-            return match.Success ? match.Groups[1].ToString() : null;
+            return line.StartsWith("Failed") ? line.Substring(6).Trim() : null;
         }
         private static List<string> GetFailedTests(string[] lines)
         {
