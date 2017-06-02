@@ -40,8 +40,7 @@ namespace ServiceClientGenerator
 
                 if (projectFileConfiguration.Template.Equals("VS2017ProjectFile", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    // for core, skip csproject generation
-                    //GenerateVS2017ProjectFile(coreFilesRoot, projectFileConfiguration, assemblyName);
+                    // for vs2017 projects, skip csproject generation
                 }
                 else
                 {
@@ -103,32 +102,34 @@ namespace ServiceClientGenerator
             CreatedProjectFiles = new Dictionary<string, ProjectConfigurationData>();
             var assemblyName = "AWSSDK." + serviceConfiguration.Namespace.Split('.')[1];
 
-            var projectReferenceList = new List<ProjectReference>();
-            foreach (var dependency in serviceConfiguration.ServiceDependencies.Keys)
-            {
-                if (string.Equals(dependency, "Core", StringComparison.InvariantCultureIgnoreCase))
-                    continue;
-
-                projectReferenceList.Add(new ProjectReference
-                {
-                    IncludePath = string.Format(@"..\..\Services\{0}\AWSSDK.{1}.CoreCLR.csproj", dependency, dependency)
-                });
-            }
-
-            projectReferenceList.Add(new ProjectReference
-            {
-                IncludePath = @"..\..\Core\AWSSDK.Core.CoreCLR.csproj"
-            });
-
             foreach (var projectFileConfiguration in projectFileConfigurations)
             {
+                var projectType = projectFileConfiguration.Name;
+
+                if (projectType.Equals("Unity", StringComparison.InvariantCultureIgnoreCase) &&     !serviceConfiguration.SupportedInUnity) continue;
+                if (projectType.Equals("CoreCLR", StringComparison.InvariantCultureIgnoreCase) &&   !serviceConfiguration.CoreCLRSupport) continue;
+
                 if (projectFileConfiguration.Template.Equals("VS2017ProjectFile", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (serviceConfiguration.CoreCLRSupport)
+                    var projectReferenceList = new List<ProjectReference>();
+                    foreach (var dependency in serviceConfiguration.ServiceDependencies.Keys)
                     {
-                        projectFileConfiguration.ProjectReferences = projectReferenceList;
-                        GenerateVS2017ProjectFile(serviceFilesRoot, projectFileConfiguration, assemblyName);
+                        if (string.Equals(dependency, "Core", StringComparison.InvariantCultureIgnoreCase))
+                            continue;
+
+                        projectReferenceList.Add(new ProjectReference
+                        {
+                            IncludePath = string.Format(@"..\..\Services\{0}\AWSSDK.{1}.{2}.csproj", dependency, dependency, projectType)
+                        });
                     }
+
+                    projectReferenceList.Add(new ProjectReference
+                    {
+                        IncludePath = string.Format(@"..\..\Core\AWSSDK.Core.{0}.csproj", projectType)
+                    });
+
+                    projectFileConfiguration.ProjectReferences = projectReferenceList;
+                    GenerateVS2017ProjectFile(serviceFilesRoot, serviceConfiguration, projectFileConfiguration);
                     continue;
                 }   
 
@@ -138,14 +139,6 @@ namespace ServiceClientGenerator
                     // Skip sub profiles for service projects.
                     continue;
                 }
-
-                var projectType = projectFileConfiguration.Name;
-                if (projectType.Equals("Unity", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (!serviceConfiguration.SupportedInUnity)
-                        continue;
-                }
-
 
                 var projectFilename = string.Concat(assemblyName, ".", projectType, ".csproj");
                 bool newProject = false;
@@ -267,40 +260,47 @@ namespace ServiceClientGenerator
             GeneratorDriver.WriteFile(serviceFilesRoot, string.Empty, projectFilename, generatedContent);
             projectConfiguration.ConfigurationPlatforms = projectFileConfiguration.Configurations;
         }
-        private void GenerateVS2017ProjectFile(string serviceFilesRoot, ProjectFileConfiguration projectFileConfiguration, string assemblyName)
+        private void GenerateVS2017ProjectFile(string serviceFilesRoot, ServiceConfiguration serviceConfiguration, ProjectFileConfiguration projectFileConfiguration)
         {
+            var assemblyName = "AWSSDK." + serviceConfiguration.Namespace.Split('.')[1];
+            var projectType = projectFileConfiguration.Name;
+
             var templateSession = new Dictionary<string, object>();
 
             templateSession["AssemblyName"]         = assemblyName;
             templateSession["ProjectReferenceList"] = projectFileConfiguration.ProjectReferences;
             templateSession["TargetFramework"]      = projectFileConfiguration.TargetFrameworkVersion;
             templateSession["DefineConstants"]      = projectFileConfiguration.CompilationConstants;
-            templateSession["CompileRemoveList"]    = new List<string>
+            templateSession["CompileRemoveList"]    = projectFileConfiguration.PlatformExcludeFolders;
+            templateSession["FrameworkPathOverride"]= projectFileConfiguration.FrameworkPathOverride;
+            templateSession["ReferencePath"]        = projectFileConfiguration.ReferencePath;
+            templateSession["FrameworkReferences"]  = projectFileConfiguration.FrameworkReferences;
+            templateSession["NoWarn"]               = projectFileConfiguration.NoWarn;
+            templateSession["SignBinaries"]         = true;
+
+            List<Dependency> dependencies;
+            List<PackageReference> references = new List<PackageReference>();
+            if (    serviceConfiguration.NugetDependencies != null &&
+                    serviceConfiguration.NugetDependencies.TryGetValue(projectFileConfiguration.Name, out dependencies))
             {
-                "**/_pcl/**",
-                "**/_pcl-sl/**",
-                "**/_bcl35/**",
-                "**/_bcl45/**",
-                "**/_bcl/**",
-                "**/_bcl+sl/**",
-                "**/_bcl+unity/**",
-                "**/_unity/**",
-                "**/_android/**",
-                "**/_ios/**",
-                "**/_pclReference/**",
-                "**/_win8/**",
-                "**/_winPhone81/**",
-                "**/_winPhoneSilverlight8/**",
-                "**/_winstorage/**",
-                "**/Custom/SyncManager/**"
-            };
+                foreach(var dependency in dependencies)
+                {
+                    references.Add(new PackageReference
+                    {
+                        Include = dependency.Name,
+                        Version = dependency.Version,
+                    });
+                }
+
+                templateSession["PackageReferenceList"] = references;
+            }
 
             var projectJsonTemplate = new VS2017ProjectFile();
             projectJsonTemplate.Session = templateSession;
 
             var content = projectJsonTemplate.TransformText();
 
-            GeneratorDriver.WriteFile(serviceFilesRoot, string.Empty, string.Concat(assemblyName, ".CoreCLR.csproj"), content);
+            GeneratorDriver.WriteFile(serviceFilesRoot, string.Empty, string.Format("{0}.{1}.csproj", assemblyName, projectType), content);
         }
 
         /// <summary>
@@ -492,7 +492,29 @@ namespace ServiceClientGenerator
         {
             public string Include { get; set; }
             public string Version { get; set; }
+            public static PackageReference ParseJson(Json.LitJson.JsonData data)
+            {
+                return new PackageReference
+                {
+                    Include = data.SafeGetString("include"),
+                    Version = data.SafeGetString("version"),
+                };
+            }
         }
 
+        public class FrameworkReference
+        {
+            public string Name { get; set; }
+            public string HintPath { get; set; }
+
+            public static FrameworkReference ParseJson(Json.LitJson.JsonData data)
+            {
+                return new FrameworkReference
+                {
+                    Name = data.SafeGetString("name"),
+                    HintPath = data.SafeGetString("hintPath"),
+                };
+            }
+        }
     }
 }

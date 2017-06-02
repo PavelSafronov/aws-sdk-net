@@ -15,6 +15,13 @@
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SignAssembly>True</SignAssembly>
+    <AWSKeyFile Condition="'$(AWSKeyFile)'==''">..\..\..\awssdk.dll.snk</AWSKeyFile>
+    <AssemblyOriginatorKeyFile>$(AWSKeyFile)</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,5 +45,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\AWSSDK.Core.CoreCLR.csproj"/>
+  </ItemGroup>
+
+
+  <ItemGroup>
   </ItemGroup>
 </Project>

@@ -21,9 +21,53 @@
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+
+<#
+    if(this.Session.ContainsKey("FrameworkPathOverride") && !string.IsNullOrEmpty((string)Session["FrameworkPathOverride"]))
+    {
+#>
+    <!-- workaround per https://github.com/Microsoft/msbuild/issues/1333 -->
+    <FrameworkPathOverride><#=this.Session["FrameworkPathOverride"].ToString()#></FrameworkPathOverride>
+<#
+    }
+    
+    if(this.Session.ContainsKey("ReferencePath") && !string.IsNullOrEmpty((string)Session["ReferencePath"]))
+    {
+#>
+    <ReferencePath><#=this.Session["ReferencePath"].ToString()#></ReferencePath>
+<#
+    }
+
+    if(this.Session.ContainsKey("NoWarn") && !string.IsNullOrEmpty((string)Session["NoWarn"]))
+    {
+#>
+    <NoWarn><#=this.Session["NoWarn"].ToString()#></NoWarn>
+<#
+    }
+
+    if(this.Session.ContainsKey("OutputPathOverride") && !string.IsNullOrEmpty((string)Session["OutputPathOverride"]))
+    {
+#>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath><#=this.Session["OutputPathOverride"].ToString()#></OutputPath>
+<#
+    }
+#>
   </PropertyGroup>
 
 <#
+    if (this.Session.ContainsKey("SignBinaries") && (bool)Session["SignBinaries"])
+    {
+#>
+  <PropertyGroup>
+    <SignAssembly>True</SignAssembly>
+    <AWSKeyFile Condition="'$(AWSKeyFile)'==''">..\..\..\awssdk.dll.snk</AWSKeyFile>
+    <AssemblyOriginatorKeyFile>$(AWSKeyFile)</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+<#
+    }
+
     if(this.Session.ContainsKey("CompileRemoveList") && this.Session["CompileRemoveList"] != null)
     {
 #>
@@ -33,7 +77,7 @@
         foreach(var compileRemoveEntry in compileRemoveList)
         {
 #>
-    <Compile Remove="<#=compileRemoveEntry.ToString()#>"/>
+    <Compile Remove="**/<#=compileRemoveEntry.ToString()#>/**"/>
 <#
         }
 #>
@@ -60,6 +104,7 @@
 <#
     }
 #>
+
 <#
     if(this.Session.ContainsKey("PackageReferenceList") && this.Session["PackageReferenceList"] != null)
     {
@@ -71,6 +116,70 @@
         {
 #>
     <PackageReference Include="<#=package.Include#>" Version="<#=package.Version#>"/>
+<#
+        }
+#>
+  </ItemGroup>
+<#
+    }
+#>
+
+<#
+    if(this.Session.ContainsKey("FrameworkReferences") && this.Session["FrameworkReferences"] != null)
+    {
+#>
+  <ItemGroup>
+<#
+        var references = this.Session["FrameworkReferences"] as IEnumerable<ProjectFileCreator.FrameworkReference>;
+        foreach(var reference in references)
+        {
+            if (string.IsNullOrEmpty(reference.HintPath))
+            {
+#>
+    <Reference Include="<#=reference.Name#>"/>
+<#
+            }
+            else
+            {
+#>
+    <Reference Include="<#=reference.Name#>">
+        <HintPath><#=reference.HintPath#></HintPath>
+    </Reference>
+<#
+            }
+        }
+#>
+  </ItemGroup>
+<#
+    }
+
+    if(this.Session.ContainsKey("EmbeddedResources") && this.Session["EmbeddedResources"] != null)
+    {
+#>
+  <ItemGroup>
+<#
+        var resourceList = this.Session["EmbeddedResources"] as IEnumerable<string>;
+        foreach(var resource in resourceList)
+        {
+#>
+    <EmbeddedResource Include="<#=resource#>"/>
+<#
+        }
+#>
+  </ItemGroup>
+<#
+    }
+
+    if(this.Session.ContainsKey("Services") && this.Session["Services"] != null)
+    {
+#>
+  <ItemGroup>
+<#
+        var serviceList = this.Session["EmbeddedResources"] as IEnumerable<string>;
+        foreach(var service in serviceList)
+        {
+#>
+    <Service Include="<#=service#>"/>
 <#
         }
 #>
