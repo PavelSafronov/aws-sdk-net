@@ -59,11 +59,18 @@
     if (this.Session.ContainsKey("SignBinaries") && (bool)Session["SignBinaries"])
     {
 #>
-  <PropertyGroup>
-    <SignAssembly>True</SignAssembly>
-    <AWSKeyFile Condition="'$(AWSKeyFile)'==''">..\..\..\awssdk.dll.snk</AWSKeyFile>
-    <AssemblyOriginatorKeyFile>$(AWSKeyFile)</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
+  <Choose>
+    <When Condition=" '$(AWSKeyFile)' == '' ">
+      <PropertyGroup>
+        <AssemblyOriginatorKeyFile>..\..\..\awssdk.dll.snk</AssemblyOriginatorKeyFile>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <AssemblyOriginatorKeyFile>$(AWSKeyFile)</AssemblyOriginatorKeyFile>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
 
 <#
     }

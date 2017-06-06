@@ -155,12 +155,12 @@
         <Message Text="Restore and compile .Net35 SDK"/>
         <Exec Command="&quot;$(SDKToolingExe)&quot; clean -c $(Configuration) $(Net35SolutionsFile)" WorkingDirectory="..\sdk"/>
         <Exec Command="&quot;$(SDKToolingExe)&quot; restore $(Net35SolutionsFile)" WorkingDirectory="..\sdk"/>
-        <Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration) --no-incremental $(Net35SolutionsFile)" WorkingDirectory="..\sdk"/>
+        <Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration) --no-incremental $(Net35SolutionsFile) /p:AWSKeyFile=$(CustomSnkFileLocation);SignAssembly=true" WorkingDirectory="..\sdk"/>
 
         <Message Text="Restore and compile .Net45 SDK"/>
         <Exec Command="&quot;$(SDKToolingExe)&quot; clean -c $(Configuration) $(Net45SolutionsFile)" WorkingDirectory="..\sdk"/>
         <Exec Command="&quot;$(SDKToolingExe)&quot; restore $(Net45SolutionsFile)" WorkingDirectory="..\sdk"/>
-        <Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration) --no-incremental $(Net45SolutionsFile)" WorkingDirectory="..\sdk"/>
+        <Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration) --no-incremental $(Net45SolutionsFile) /p:AWSKeyFile=$(CustomSnkFileLocation);SignAssembly=true" WorkingDirectory="..\sdk"/>
     </Target>
 
 	<Target Name="build-code-analysis" DependsOnTargets="restore-nuget;run-generator">
@@ -180,7 +180,7 @@
         <Message Text="Restore and compile CoreCLR version of the SDK"/>
         <Exec Command="&quot;$(SDKToolingExe)&quot; clean -c $(Configuration) $(CoreCLRSolutionFile)" WorkingDirectory="..\sdk"/>
         <Exec Command="&quot;$(SDKToolingExe)&quot; restore $(CoreCLRSolutionFile)" WorkingDirectory="..\sdk"/>
-        <Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration) --no-incremental $(CoreCLRSolutionFile)" WorkingDirectory="..\sdk"/>
+        <Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration) --no-incremental $(CoreCLRSolutionFile) /p:AWSKeyFile=$(CustomSnkFileLocation);SignAssembly=true" WorkingDirectory="..\sdk"/>
     </Target>
 	
 	<Target Name="build-sdk-unity" DependsOnTargets="restore-nuget;run-generator" Condition="!$(DisableUnitySupport)">

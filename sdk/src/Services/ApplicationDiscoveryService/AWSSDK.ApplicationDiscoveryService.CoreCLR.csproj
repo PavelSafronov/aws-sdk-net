@@ -18,11 +18,18 @@
 
   </PropertyGroup>
 
-  <PropertyGroup>
-    <SignAssembly>True</SignAssembly>
-    <AWSKeyFile Condition="'$(AWSKeyFile)'==''">..\..\..\awssdk.dll.snk</AWSKeyFile>
-    <AssemblyOriginatorKeyFile>$(AWSKeyFile)</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
+  <Choose>
+    <When Condition=" '$(AWSKeyFile)' == '' ">
+      <PropertyGroup>
+        <AssemblyOriginatorKeyFile>..\..\..\awssdk.dll.snk</AssemblyOriginatorKeyFile>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <AssemblyOriginatorKeyFile>$(AWSKeyFile)</AssemblyOriginatorKeyFile>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
 
   <ItemGroup>
     <Compile Remove="**/_pcl/**"/>

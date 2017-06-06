@@ -61,6 +61,8 @@ namespace TestWrapper
                 components.Add(string.Format("--filter \"{0}\"", filter));
             }
 
+            components.Add("--no-build");
+
             var args = string.Join(" ", components);
             return args;
         }
