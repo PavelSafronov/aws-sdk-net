@@ -5,5 +5,4 @@ dist: trusty
 
 script:
   - dotnet restore sdk/AWSSDK.CoreCLR.sln
-  - dotnet build sdk/AWSSDK.CoreCLR.sln
-  - dotnet test --no-build sdk/test/CoreCLR/UnitTests/UnitTests.CoreCLR.csproj
+  - dotnet build sdk/AWSSDK.CoreCLR.sln /p:SignAssembly=false
