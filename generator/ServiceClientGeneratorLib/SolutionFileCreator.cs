@@ -110,16 +110,16 @@ namespace ServiceClientGenerator
                     GetProjectConfig(ProjectTypes.CoreCLR)
                 };
 
-            GenerateVS2017Solution("AWSSDK.Net35.sln", true, net35ProjectConfigs);
-            GenerateVS2017Solution("AWSSDK.Net45.sln", true, net45ProjectConfigs);
+            GenerateVS2017Solution("AWSSDK.Net35.sln", true, false, net35ProjectConfigs);
+            GenerateVS2017Solution("AWSSDK.Net45.sln", true, false, net45ProjectConfigs);
             GenerateCombinedSolution("AWSSDK.PCL.sln", true, pclProjectConfigs);
             GenerateCombinedSolution("AWSSDK.Unity.sln", false, unityProjectConfigs);
 
-            GenerateVS2017Solution("AWSSDK.CoreCLR.sln", true, coreCLRProjectConfigs);
-                
+            GenerateVS2017Solution("AWSSDK.CoreCLR.sln", true, false, coreCLRProjectConfigs);
+
             // Include solutions that Travis CI can build
-            GeneratePlatformSpecificSolution(GetProjectConfig(ProjectTypes.Net35), false, true, "AWSSDK.Net35.Travis.sln");
-            GeneratePlatformSpecificSolution(GetProjectConfig(ProjectTypes.Net45), false, true, "AWSSDK.Net45.Travis.sln");
+            GenerateVS2017Solution("AWSSDK.Net35.Travis.sln", false, true, net35ProjectConfigs);
+            GenerateVS2017Solution("AWSSDK.Net45.Travis.sln", false, true, net45ProjectConfigs);
 
             ICollection<string> projectsForPartialBuild = Options.PartialBuildList;
             if (projectsForPartialBuild != null && projectsForPartialBuild.Count != 0)
@@ -369,7 +369,7 @@ namespace ServiceClientGenerator
         }
 
 
-        private void GenerateVS2017Solution(string solutionFileName, bool includeTests, IEnumerable<ProjectFileConfiguration> projectFileConfigurations, ICollection<string> serviceProjectsForPartialBuild = null)
+        private void GenerateVS2017Solution(string solutionFileName, bool includeTests, bool isTravisSolution, IEnumerable<ProjectFileConfiguration> projectFileConfigurations, ICollection<string> serviceProjectsForPartialBuild = null)
         {
             //
             // Since vs2017 .csproj files are not identified by guid, see if we can scan and determine the guid ahead of time to reduce changes
@@ -402,6 +402,9 @@ namespace ServiceClientGenerator
                     string projectFilePattern = string.Format("*.{0}.csproj", configuration.Name);
                     foreach (var projectFile in Directory.GetFiles(servicePath, projectFilePattern, SearchOption.TopDirectoryOnly))
                     {
+                        if (isTravisSolution && projectFile.Contains("AWSSDK.MobileAnalytics"))
+                            continue;
+
                         string projectName = Path.GetFileNameWithoutExtension(projectFile);
                         folder.Projects.Add(new Project
                         {
