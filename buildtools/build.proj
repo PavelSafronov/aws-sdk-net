@@ -223,7 +223,7 @@
         <Exec Command="&quot;$(SDKToolingExe)&quot; build -c $(Configuration) $(CoreCLRUnitTests)" WorkingDirectory="..\sdk\test\CoreCLR\UnitTests"/>
     </Target>
 
-    <Target Name="run-unit-tests" DependsOnTargets="build-tests;build-test-wrapper;GetSDKToolingInfoTarget" >
+    <Target Name="run-unit-tests" DependsOnTargets="init;build-sdk;build-tests;build-test-wrapper;GetSDKToolingInfoTarget" >
         <MsTestWrapperTask
             TestSuiteRunner="$(SDKToolingExe)"
             TestContainer="..\sdk\test\UnitTests\$(Net35UnitTestProject)"
