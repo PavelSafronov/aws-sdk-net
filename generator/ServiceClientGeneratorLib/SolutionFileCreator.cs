@@ -130,11 +130,10 @@ namespace ServiceClientGenerator
                     projectsForPartialBuild = null;
                 }
 
-                GenerateCombinedSolution("Build.Net35.partial.sln", false, net35ProjectConfigs, projectsForPartialBuild);
-                GenerateCombinedSolution("Build.Net45.partial.sln", false, net45ProjectConfigs, projectsForPartialBuild);
+                GenerateVS2017Solution("Build.Net35.partial.sln", false, false, net35ProjectConfigs, projectsForPartialBuild);
+                GenerateVS2017Solution("Build.Net45.partial.sln", false, false, net45ProjectConfigs, projectsForPartialBuild);
                 GenerateCombinedSolution("Build.PCL.partial.sln", false, pclProjectConfigs, projectsForPartialBuild);
-
-                //GenerateBuildUnitTestSolution("Build.UnitTests.partial.sln", desktopProjectConfigs, projectsForPartialBuild);
+                GenerateVS2017Solution("Build.CoreCLR.partial.sln", false, false, coreCLRProjectConfigs, projectsForPartialBuild);
             }
         }
 

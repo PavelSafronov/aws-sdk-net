@@ -140,6 +140,7 @@
   <ItemGroup>
     <Reference Include="System.Configuration"/>
   </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="Custom\Runtime\TestResponses\*.txt"/>
     <EmbeddedResource Include="Custom\TestTools\ComparerTest.json"/>

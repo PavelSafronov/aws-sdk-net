@@ -89,10 +89,10 @@
         }
 #>
   </ItemGroup>
+
 <#
     }
 #>
-
 <#
     if(this.Session.ContainsKey("ProjectReferenceList") && this.Session["ProjectReferenceList"] != null)
     {
@@ -108,10 +108,10 @@
         }
 #>
   </ItemGroup>
+
 <#
     }
 #>
-
 <#
     if(this.Session.ContainsKey("PackageReferenceList") && this.Session["PackageReferenceList"] != null)
     {
@@ -127,10 +127,31 @@
         }
 #>
   </ItemGroup>
+
 <#
     }
 #>
+<#
+    if(this.Session.ContainsKey("ServiceDllReferences") && this.Session["ServiceDllReferences"] != null)
+    {
+#>
+  <ItemGroup>
+<#
+        var dllReferenceList = this.Session["ServiceDllReferences"] as IList<ProjectFileCreator.Reference>;
+        foreach(var reference in dllReferenceList)
+        {
+#>
+    <Reference Include="<#=reference.Name#>">
+      <HintPath><#=reference.HintPath#></HintPath>
+    </Reference>
+<#
+        }
+#>
+  </ItemGroup>
 
+<#
+    }
+#>
 <#
     if(this.Session.ContainsKey("FrameworkReferences") && this.Session["FrameworkReferences"] != null)
     {
@@ -157,9 +178,9 @@
         }
 #>
   </ItemGroup>
+
 <#
     }
-
     if(this.Session.ContainsKey("EmbeddedResources") && this.Session["EmbeddedResources"] != null)
     {
 #>

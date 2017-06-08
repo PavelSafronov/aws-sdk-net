@@ -55,7 +55,7 @@
     <ProjectReference Include="..\..\Core\AWSSDK.Core.CoreCLR.csproj"/>
   </ItemGroup>
 
-
   <ItemGroup>
   </ItemGroup>
+
 </Project>

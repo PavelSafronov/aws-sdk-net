@@ -51,9 +51,9 @@
     <ProjectReference Include="..\..\Core\AWSSDK.Core.Net45.csproj"/>
   </ItemGroup>
 
-
   <ItemGroup>
     <Reference Include="System.Configuration"/>
     <Reference Include="System.Net.Http"/>
   </ItemGroup>
+
 </Project>

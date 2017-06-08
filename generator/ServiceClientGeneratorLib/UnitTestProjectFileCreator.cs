@@ -31,9 +31,10 @@ namespace ServiceClientGenerator
 
                 if (useDllReference)
                 {
-                    projectName = string.Format("AWSSDK.UnitTests.{0}.partial.csproj", configuration.Name);
+                    projectName = string.Format("Build.UnitTests.{0}.partial.csproj", configuration.Name);
                     serviceProjectReferences = null;
                     dllProjectReferences = ServiceDllReferences(unitTestRoot, serviceConfigurations, configuration.Name);
+                    
                 }
                 else
                 {
@@ -49,8 +50,6 @@ namespace ServiceClientGenerator
                     {"DefineConstants",         "DEBUG;" + configuration.CompilationConstants},
                     {"Reference",               configuration.FrameworkReferences},
                     {"CompileRemoveList",       configuration.PlatformExcludeFolders},
-                    {"ProjectReferenceList",    commonReferences.Concat(serviceProjectReferences).ToList()},
-                    {"ServiceDllReferences",    dllProjectReferences},
                     {"EmbeddedResources",       configuration.EmbeddedResources},
                     {"Services",                configuration.VisualStudioServices},
                     {"ReferencePath",           configuration.ReferencePath},
@@ -61,6 +60,16 @@ namespace ServiceClientGenerator
                     {"OutputPathOverride",      configuration.OutputPathOverride },
                     {"SignBinaries",            false},
                 };
+
+                if (useDllReference) session.Add("ServiceDllReferences", dllProjectReferences);
+                if (serviceProjectReferences != null)
+                {
+                    session.Add("ProjectReferenceList", commonReferences.Concat(serviceProjectReferences).ToList());
+                }
+                else
+                {
+                    session.Add("ProjectReferenceList", commonReferences);
+                }
 
                 GenerateProjectFile(session, unitTestRoot, projectName);
             }
